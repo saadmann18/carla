@@ -14,6 +14,7 @@ execute_process (
     ${Python3_EXECUTABLE}
       -c
       "import numpy; print(numpy.__version__)"
+  OUTPUT_STRIP_TRAILING_WHITESPACE
   OUTPUT_VARIABLE
     NUMPY_VERSION_STRING
   RESULT_VARIABLE
@@ -22,7 +23,7 @@ execute_process (
 if (NUMPY_VERSION_QUERY_RESULT)
   carla_error ("Failed to query numpy version.")
 endif ()
-carla_message ("Found Numpy ${NUMPY_VERSION_STRING}.")
+carla_message ("Found Numpy ${NUMPY_VERSION_STRING} for Python ${Python3_VERSION} (${Python3_EXECUTABLE}).")
 if ("${NUMPY_VERSION_STRING}" VERSION_GREATER "2.0.0")
   carla_error ("Unsupported Numpy version, please downgrade to a version prior to numpy 2.")
 endif ()
