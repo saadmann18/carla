@@ -21,22 +21,52 @@ class USplineComponent;
 UCLASS()
 class CARLATOOLS_API AMeshToSplineActor : public AActor
 {
-    GENERATED_BODY()
-
+	GENERATED_BODY()
 public:
-    AMeshToSplineActor();
+	AMeshToSplineActor();
 
-    /** Generate the spline from the mesh found in SourceActor, applying the given transform to the mesh vertices. */
-    UFUNCTION(BlueprintCallable, CallInEditor, Category = "Mesh To Spline")
-    void GenerateSpline();
+	UPROPERTY(EditInstanceOnly, Category="MeshToSpline")
+	AActor* SourceActor = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Transient, Category="MeshToSpline")
+	TArray<USplineComponent*> GeneratedSplines;
+
+	UFUNCTION(CallInEditor, Category="MeshToSpline")
+	void GenerateSpline();
+
+    // --- Post processing controls ---
+    UPROPERTY(EditAnywhere, Category="MeshToSpline|Merge", meta=(ClampMin="0.0"))
+    float WeldVertexTolerance = 5.0f;        // cm: weld vertices before islanding (reduces micro-gaps)
+
+    UPROPERTY(EditAnywhere, Category="MeshToSpline|Merge", meta=(ClampMin="0.0"))
+    float MergeIslandsDistance = 100.0f;     // cm: if two outer loops are closer than this, merge them
+
+    UPROPERTY(EditAnywhere, Category="MeshToSpline|Merge", meta=(ClampMin="0.0"))
+    float ContainmentEpsilon = 2.0f;         // cm: treat a loop inside another (2D) as inner -> remove
+
 
 protected:
-    /** Spline component used to store the generated path. */
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-    USplineComponent* SplineComponent;
+	virtual void OnConstruction(const FTransform& Transform) override;
 
-public:
-    /** Actor that holds the StaticMeshComponent to sample. */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh To Spline")
-    AActor* SourceActor = nullptr;
+private:
+	USplineComponent* CreateEditorVisibleSpline(const FString& Name);
+	void ClearGeneratedSplines();
+
+	// --- helpers ---
+	static void BuildIslands(const TArray<int32>& Triangles, TArray<TArray<int32>>& OutIslands);
+	static void BuildBoundaryLoopsForIsland(const TArray<FVector>& Vertices,
+	                                        const TArray<int32>& Triangles,
+	                                        const TArray<int32>& IslandTriangles,
+	                                        TArray<TArray<int32>>& OutLoopsIdx);
+
+	static void ChooseProjectionAxisZ(const TArray<FVector>& Pts, int32& AxisZ /*0=X,1=Y,2=Z*/);
+	static double SignedArea2D(const TArray<FVector>& Poly, int32 AxisZ);
+
+    static void WeldVertices(const TArray<FVector>& InVerts, const TArray<int32>& InTris,
+                            float Tol, TArray<FVector>& OutVerts, TArray<int32>& OutTris);
+
+    static void ProjectPoly2D(const TArray<FVector>& Poly, int32 AxisZ, TArray<FVector2D>& Out);
+    static bool PointInPoly2D(const FVector2D& P, const TArray<FVector2D>& Poly);
+
+    static bool LoopsAreWithin(const TArray<FVector>& A, const TArray<FVector>& B, float Dist);
 };
