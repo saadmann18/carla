@@ -1150,12 +1150,15 @@ class CameraManager(object):
                 if bp.has_attribute('gamma'):
                     bp.set_attribute('gamma', str(gamma_correction))
                 for attr_name, attr_value in item[3].items():
-                    bp.set_attribute(attr_name, attr_value)
+                    # Some CARLA versions/sensors may not support certain attributes
+                    if bp.has_attribute(attr_name):
+                        bp.set_attribute(attr_name, attr_value)
             elif item[0].startswith('sensor.lidar'):
                 self.lidar_range = 50
 
                 for attr_name, attr_value in item[3].items():
-                    bp.set_attribute(attr_name, attr_value)
+                    if bp.has_attribute(attr_name):
+                        bp.set_attribute(attr_name, attr_value)
                     if attr_name == 'range':
                         self.lidar_range = float(attr_value)
 
