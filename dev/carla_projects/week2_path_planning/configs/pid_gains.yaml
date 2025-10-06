@@ -1,0 +1,59 @@
+# PID Controller Gains Configuration
+# Tuned parameters for different control scenarios
+
+# Steering PID gains for lateral control
+steering_pid:
+  kp: 1.2      # Proportional gain - responsiveness to cross-track error
+  ki: 0.05     # Integral gain - eliminates steady-state error
+  kd: 0.15     # Derivative gain - reduces overshoot and oscillations
+
+# Speed PID gains for longitudinal control  
+speed_pid:
+  kp: 0.8      # Proportional gain - throttle/brake response to speed error
+  ki: 0.1      # Integral gain - maintains target speed
+  kd: 0.05     # Derivative gain - smooth acceleration/deceleration
+
+# Position PID gains for waypoint following
+position_pid:
+  kp: 2.0      # Proportional gain - position error response
+  ki: 0.02     # Integral gain - eliminates position drift
+  kd: 0.3      # Derivative gain - smooth position control
+
+# Aggressive tuning for racing scenarios
+aggressive_steering:
+  kp: 2.0
+  ki: 0.1
+  kd: 0.25
+
+aggressive_speed:
+  kp: 1.5
+  ki: 0.2
+  kd: 0.1
+
+# Conservative tuning for safety-critical scenarios
+conservative_steering:
+  kp: 0.8
+  ki: 0.02
+  kd: 0.1
+
+conservative_speed:
+  kp: 0.5
+  ki: 0.05
+  kd: 0.02
+
+# Control limits
+control_limits:
+  steering_max: 1.0      # Maximum steering command [-1, 1]
+  throttle_max: 1.0      # Maximum throttle command [0, 1]
+  brake_max: 1.0         # Maximum brake command [0, 1]
+  
+# Anti-windup limits
+integral_limits:
+  steering_integral_max: 0.5
+  speed_integral_max: 0.3
+  position_integral_max: 5.0
+
+# Filter settings
+filters:
+  derivative_filter_alpha: 0.2  # Low-pass filter for derivative term
+  sample_time: 0.05            # Expected control loop sample time (20Hz)

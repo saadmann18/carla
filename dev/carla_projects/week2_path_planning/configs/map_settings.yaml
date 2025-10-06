@@ -1,0 +1,106 @@
+# Map and Environment Settings Configuration
+
+# Default Carla maps and their characteristics
+maps:
+  Town01:
+    description: "Simple town with basic road network"
+    complexity: "low"
+    recommended_for: ["basic_testing", "algorithm_validation"]
+    spawn_points: 79
+    
+  Town02:
+    description: "Small town with more complex intersections"
+    complexity: "medium"
+    recommended_for: ["intersection_testing", "traffic_scenarios"]
+    spawn_points: 79
+    
+  Town03:
+    description: "Larger urban area with highway"
+    complexity: "high"
+    recommended_for: ["highway_planning", "urban_navigation"]
+    spawn_points: 78
+    
+  Town04:
+    description: "Small town with highway and ramps"
+    complexity: "medium"
+    recommended_for: ["highway_merging", "ramp_scenarios"]
+    spawn_points: 75
+    
+  Town05:
+    description: "Urban environment with bridges and tunnels"
+    complexity: "high"
+    recommended_for: ["complex_navigation", "multilevel_planning"]
+    spawn_points: 73
+
+# Environment settings
+environment:
+  # Weather conditions for testing
+  weather_presets:
+    - "ClearNoon"
+    - "CloudyNoon" 
+    - "WetNoon"
+    - "ClearSunset"
+    - "SoftRainNoon"
+    
+  # Simulation settings
+  synchronous_mode: true
+  fixed_delta_seconds: 0.05  # 20 FPS
+  no_rendering_mode: false   # Set to true for faster simulation
+  
+  # Traffic settings
+  traffic:
+    num_vehicles: 50
+    num_pedestrians: 100
+    autopilot_percentage: 0.8
+    
+# Waypoint extraction settings
+waypoint_extraction:
+  distance_between_waypoints: 2.0  # meters
+  lane_change_distance: 10.0       # meters
+  junction_waypoint_distance: 1.0  # meters
+  
+# Road network settings
+road_network:
+  connection_distance_threshold: 3.0  # meters
+  lane_width_threshold: 2.0          # meters
+  elevation_threshold: 1.0           # meters
+  
+# Visualization settings
+visualization:
+  waypoint_size: 0.1
+  waypoint_color: [0, 255, 0]      # Green
+  path_color: [255, 0, 0]          # Red
+  connection_color: [0, 0, 255]    # Blue
+  debug_draw_time: 60.0            # seconds
+  
+# Bounds for different maps (approximate)
+map_bounds:
+  Town01:
+    min_x: -200
+    max_x: 200
+    min_y: -200
+    max_y: 200
+    
+  Town02:
+    min_x: -100
+    max_x: 100
+    min_y: -100
+    max_y: 100
+    
+  Town03:
+    min_x: -250
+    max_x: 250
+    min_y: -250
+    max_y: 250
+    
+  Town04:
+    min_x: -400
+    max_x: 400
+    min_y: -300
+    max_y: 300
+    
+  Town05:
+    min_x: -300
+    max_x: 300
+    min_y: -300
+    max_y: 300

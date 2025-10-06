@@ -1,0 +1,83 @@
+# Path Planning Algorithm Settings Configuration
+
+# A* Algorithm Settings
+astar:
+  heuristic_weight: 1.0        # Weight for heuristic function (1.0 = optimal)
+  allow_diagonal_movement: true # Allow diagonal connections in grid
+  tie_breaking_factor: 0.001   # Small factor to break ties consistently
+  max_iterations: 10000        # Maximum search iterations
+  grid_resolution: 1.0         # Grid cell size in meters (for grid-based A*)
+  
+# RRT Algorithm Settings  
+rrt:
+  step_size: 3.0              # Maximum distance for tree extension
+  goal_bias: 0.1              # Probability of sampling goal (0.0-1.0)
+  goal_tolerance: 3.0         # Distance threshold to consider goal reached
+  max_iterations: 5000        # Maximum tree expansion iterations
+  collision_check_resolution: 0.5  # Resolution for collision checking
+  
+# RRT* Algorithm Settings
+rrt_star:
+  step_size: 3.0              # Maximum distance for tree extension
+  goal_bias: 0.1              # Probability of sampling goal
+  goal_tolerance: 3.0         # Distance threshold to consider goal reached
+  max_iterations: 5000        # Maximum tree expansion iterations
+  rewire_radius: 15.0         # Radius for rewiring optimization
+  collision_check_resolution: 0.5  # Resolution for collision checking
+  optimization_iterations: 100 # Additional iterations for path optimization
+
+# Dynamic RRT Settings (for traffic scenarios)
+dynamic_rrt:
+  replan_interval: 2.0        # Seconds between replanning
+  tree_reset_percentage: 0.3  # Percentage of tree to reset during replanning
+  prediction_horizon: 5.0     # Seconds to predict obstacle movement
+  safety_margin: 2.0          # Additional safety distance around obstacles
+
+# Obstacle Settings
+obstacles:
+  static_obstacle_inflation: 1.0    # Meters to inflate static obstacles
+  dynamic_obstacle_inflation: 2.0   # Meters to inflate moving obstacles
+  vehicle_safety_radius: 3.0        # Safety radius around vehicles
+  pedestrian_safety_radius: 1.5     # Safety radius around pedestrians
+  
+# Path Smoothing Settings
+path_smoothing:
+  enable_smoothing: true
+  smoothing_iterations: 10
+  smoothing_factor: 0.3       # 0.0 = no smoothing, 1.0 = maximum smoothing
+  min_turning_radius: 5.0     # Minimum turning radius for vehicles
+  
+# Performance Settings
+performance:
+  timeout_seconds: 30.0       # Maximum time allowed for planning
+  memory_limit_mb: 512        # Memory limit for planning algorithms
+  parallel_processing: false  # Enable parallel processing where possible
+  
+# Validation Settings
+validation:
+  path_collision_check: true   # Validate final path for collisions
+  path_smoothness_check: true  # Check path smoothness metrics
+  path_length_check: true      # Validate reasonable path length
+  max_path_length_ratio: 3.0   # Max ratio of path length to straight-line distance
+
+# Algorithm Selection Criteria
+algorithm_selection:
+  # Recommended algorithms for different scenarios
+  open_space: ["astar", "rrt"]
+  dense_obstacles: ["rrt_star", "dynamic_rrt"]
+  dynamic_environment: ["dynamic_rrt", "rrt"]
+  real_time: ["rrt", "astar"]
+  optimal_path: ["astar", "rrt_star"]
+  
+# Comparison Settings
+comparison:
+  num_test_runs: 5            # Number of runs for statistical comparison
+  test_scenarios: ["open", "sparse", "dense", "narrow", "maze"]
+  metrics: ["success_rate", "planning_time", "path_length", "path_smoothness"]
+  
+# Debug and Logging
+debug:
+  enable_visualization: true   # Enable debug visualization
+  save_intermediate_results: false  # Save planning steps
+  log_level: "INFO"           # DEBUG, INFO, WARNING, ERROR
+  profiling_enabled: false    # Enable performance profiling

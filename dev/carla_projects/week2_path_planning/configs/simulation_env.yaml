@@ -1,0 +1,163 @@
+# Simulation Environment Configuration
+
+# Carla Server Connection
+carla_server:
+  host: "localhost"
+  port: 2000
+  timeout: 10.0              # Connection timeout in seconds
+  retry_attempts: 3          # Number of connection retry attempts
+  retry_delay: 2.0           # Delay between retry attempts
+
+# World Settings
+world:
+  map_name: "Town01"         # Default map to load
+  synchronous_mode: true     # Enable synchronous simulation
+  fixed_delta_seconds: 0.05  # Simulation timestep (20 FPS)
+  no_rendering_mode: false   # Disable rendering for faster simulation
+  
+# Weather Configuration
+weather:
+  default_preset: "ClearNoon"
+  dynamic_weather: false     # Enable dynamic weather changes
+  weather_change_interval: 300.0  # Seconds between weather changes
+  
+  # Custom weather parameters (if not using presets)
+  custom_weather:
+    cloudiness: 0.0          # 0.0 to 100.0
+    precipitation: 0.0       # 0.0 to 100.0
+    precipitation_deposits: 0.0  # 0.0 to 100.0
+    wind_intensity: 0.0      # 0.0 to 100.0
+    sun_azimuth_angle: 0.0   # 0.0 to 360.0
+    sun_altitude_angle: 75.0 # -90.0 to 90.0
+
+# Vehicle Configuration
+vehicles:
+  # Ego vehicle (main controlled vehicle)
+  ego_vehicle:
+    blueprint: "vehicle.tesla.model3"
+    spawn_point_index: 0     # Index in spawn points list, -1 for random
+    autopilot: false         # Enable autopilot
+    role_name: "ego"
+    
+  # Traffic vehicles
+  traffic_vehicles:
+    count: 20                # Number of traffic vehicles to spawn
+    autopilot_percentage: 0.8  # Percentage with autopilot enabled
+    blueprints:              # List of vehicle blueprints to use
+      - "vehicle.audi.a2"
+      - "vehicle.bmw.grandtourer"
+      - "vehicle.chevrolet.impala"
+      - "vehicle.dodge.charger_2020"
+      - "vehicle.ford.mustang"
+      - "vehicle.mercedes.coupe_2020"
+      - "vehicle.nissan.patrol_2021"
+      - "vehicle.toyota.prius"
+    
+# Pedestrian Configuration  
+pedestrians:
+  count: 50                  # Number of pedestrians to spawn
+  running_percentage: 0.1    # Percentage of running pedestrians
+  crossing_percentage: 0.2   # Percentage crossing roads
+
+# Sensors Configuration
+sensors:
+  # Camera sensors
+  cameras:
+    rgb_camera:
+      enabled: true
+      image_size_x: 800
+      image_size_y: 600
+      fov: 90.0
+      location: [2.0, 0.0, 1.4]  # Relative to vehicle
+      rotation: [0.0, 0.0, 0.0]
+      
+    depth_camera:
+      enabled: false
+      image_size_x: 800
+      image_size_y: 600
+      fov: 90.0
+      location: [2.0, 0.0, 1.4]
+      rotation: [0.0, 0.0, 0.0]
+      
+  # LiDAR sensor
+  lidar:
+    enabled: false
+    channels: 32
+    range: 100.0             # meters
+    points_per_second: 100000
+    rotation_frequency: 10.0  # Hz
+    location: [0.0, 0.0, 2.0]
+    rotation: [0.0, 0.0, 0.0]
+    
+  # GPS sensor
+  gps:
+    enabled: true
+    noise_alt_stddev: 0.0
+    noise_lat_stddev: 0.0
+    noise_lon_stddev: 0.0
+    location: [0.0, 0.0, 0.0]
+    
+  # IMU sensor
+  imu:
+    enabled: true
+    noise_accel_stddev_x: 0.0
+    noise_accel_stddev_y: 0.0
+    noise_accel_stddev_z: 0.0
+    noise_gyro_stddev_x: 0.0
+    noise_gyro_stddev_y: 0.0
+    noise_gyro_stddev_z: 0.0
+    location: [0.0, 0.0, 0.0]
+
+# Recording Configuration
+recording:
+  enabled: false             # Enable simulation recording
+  filename: "path_planning_recording"
+  additional_data: true      # Record additional simulation data
+  
+# Performance Settings
+performance:
+  # Quality settings for faster simulation
+  quality_level: "Low"       # Low, Medium, High, Epic
+  
+  # Culling settings
+  culling_distance: 100.0    # Distance for actor culling
+  
+  # Physics settings
+  physics_substeps: 10       # Physics simulation substeps
+  max_substep_delta_time: 0.01
+  
+# Safety Settings
+safety:
+  collision_detection: true  # Enable collision detection
+  lane_invasion_detection: true  # Detect lane invasions
+  
+  # Emergency stops
+  emergency_brake_distance: 5.0  # Distance for emergency braking
+  max_speed_limit: 60.0      # km/h maximum speed limit
+  
+# Logging Configuration
+logging:
+  log_level: "INFO"          # DEBUG, INFO, WARNING, ERROR
+  log_to_file: true
+  log_filename: "simulation.log"
+  
+  # What to log
+  log_vehicle_states: true
+  log_control_commands: true
+  log_sensor_data: false
+  log_collisions: true
+  log_performance_metrics: true
+  
+# Output Directories
+output:
+  base_directory: "output_data"
+  create_timestamped_folders: true
+  save_sensor_data: false
+  save_vehicle_trajectories: true
+  save_planning_results: true
+
+# Experimental Features
+experimental:
+  traffic_manager_port: 8000
+  hybrid_physics_mode: false
+  large_map_streaming: false
